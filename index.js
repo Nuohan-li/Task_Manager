@@ -1,9 +1,20 @@
 const express = require('express')
+const util = require('util')
+const exec  = util.promisify(require('child_process').exec)
 const User = require('./src/db/user')
 const Task = require('./src/db/task')
 
 // automatically connects to the database
-require('./src/db/mongoose')
+// require('./src/db/mongoose')
+const mongoose = require('mongoose')
+
+mongoose.connect('mongodb://127.0.0.1:27017/task-db-mongoose', {
+    useNewUrlParser: true 
+})
+
+// run command to start the database
+// cd ../school/side-project/mongodb-linux-x86_64-ubuntu2004-5.0.6/bin
+console.log('db is running now')
 
 const app = express()
 const port = process.env.PORT || 5000

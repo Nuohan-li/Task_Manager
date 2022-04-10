@@ -16,13 +16,6 @@ const DELETE_button = document.getElementsByClassName('button4')[0]
 window.onload = getData()
 updateTime()
 
-// getting all tasks from the database
-GET_button.addEventListener('click', (event) => {
-    event.preventDefault()
-    getData()
-
-})
-
 // getting all data from database and display to the screen
 function getData(){
     let taskNum = 0
@@ -42,9 +35,11 @@ function getData(){
                 let deleteButton = document.createElement("button")
                 deleteButton.textContent = "delete"
 
+                // event listener for delete buttons 
                 deleteButton.addEventListener('click', (event) => {
                     event.preventDefault()
                     let id = []
+                    // getting the index from the html
                     let index = deleteButton.parentNode.children[0].textContent
                     console.log(index)
                     document.getElementsByClassName('task1')[0].textContent = index
@@ -67,6 +62,7 @@ function getData(){
                     })
                 })
 
+                // adding tasks to HTML file
                 indexP.textContent = (i + 1)
                 indexP.setAttribute('id', i )
                 taskP.textContent = data[i].task.toString()
@@ -94,6 +90,11 @@ POST_button.addEventListener('click', (event) => {
     let taskDesc = document.getElementsByClassName("task")[0].value
     let date = document.getElementsByClassName('date')[0].value
 
+    if(!taskDesc){
+        alert("Please enter both task description")
+        return
+    }
+
     fetch('http://127.0.0.1:5000/tasks', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
@@ -108,26 +109,23 @@ REFRESH_button.addEventListener('click', (event) => {
     document.location.reload()
 })
 
-// deleting a task
+// deleting all tasks
 DELETE_button.addEventListener('click', (event) => {
     event.preventDefault()
     
-    let id = []
-    // getting all IDs
+    // getting all IDs and delete all tasks based on their IDs
     fetch('http://127.0.0.1:5000/tasks').then( (response) => {
         response.json().then( (data) => {
             taskNum = data.length
            
             for(let i = 0; i < taskNum; i++){
-                id[i] = data[i]._id.toString()
+                fetch('http://127.0.0.1:5000/tasks/' + data[i]._id.toString(), {
+                    method: 'DELETE'
+                })
             }
-            // delete the task
-            fetch('http://127.0.0.1:5000/tasks/' + id[3], {
-                method: 'DELETE'
-            }).then( (result) => {
-                document.location.reload()
-            })
         })
+    }).then( (result) => {
+        document.location.reload()
     })
 })
 

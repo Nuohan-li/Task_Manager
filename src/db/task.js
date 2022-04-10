@@ -8,8 +8,7 @@ const Task = mongoose.model('Task', {
         required: true
     },
     due: {
-        type: String,
-        required: true
+        type: String
     },
     completed: {
         type: Boolean,
