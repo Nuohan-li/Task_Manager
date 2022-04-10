@@ -131,7 +131,7 @@ DELETE_button.addEventListener('click', (event) => {
     })
 })
 
-// update the time on top of the screen
+// update the time on the screen
 function updateTime(){
     let time = new Date();
 
