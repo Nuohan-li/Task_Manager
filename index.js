@@ -1,9 +1,9 @@
 const express = require('express')
-const User = require('./db/user')
-const Task = require('./db/task')
+const User = require('./src/db/user')
+const Task = require('./src/db/task')
 
 // automatically connects to the database
-require('./db/mongoose')
+require('./src/db/mongoose')
 
 const app = express()
 const port = process.env.PORT || 5000
@@ -11,6 +11,10 @@ const port = process.env.PORT || 5000
 // automatically parse incoming json to an object, when user use http POST to send a json object, it will be 
 // parsed save in req.body 
 app.use(express.json())
+
+// allows client side JS file to be loaded
+app.use("/views", express.static(__dirname + '/views'));
+
 
 // sending information from client to server -> json sent by client is parsed to req.body
 // now the req.body, which contains the document can be saved to the database using mongoose
@@ -108,11 +112,24 @@ app.delete('/users/:id', async (req, res) => {
     }
 })
 
+app.delete('/tasks/:id', async (req, res) => {
+    try {
+        const task = await Task.findByIdAndDelete(req.params.id)
 
+        if(!task){
+            res.status(404).send({error: 'no such user'})
+        }
+
+        res.send(task)
+    } catch (error) {
+        res.status(500).send({error: 'error'})
+    }
+})
 
 app.post('/tasks', (req, res) => {
     const task = new Task(req.body)
     task.save().then((result) => {
+        console.log(task)
         res.send(task)
     }).catch( (error) => {
         res.status(400).send(error)
@@ -149,6 +166,9 @@ app.patch('/tasks/:id', async (req, res) => {
     }
 })
 
+app.get('/', (req, res) => {
+    res.sendFile(__dirname + '/views/index.html')
+})
 
 app.listen(port, () => {
     console.log('server is listening on ' + port)
