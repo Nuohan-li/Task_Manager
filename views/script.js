@@ -88,7 +88,7 @@ POST_button.addEventListener('click', (event) => {
     event.preventDefault()
 
     let taskDesc = document.getElementsByClassName("task")[0].value
-    let date = document.getElementsByClassName('date')[0].value
+    let date = document.getElementsByClassName('date-input')[0].value
 
     if(!taskDesc){
         alert("Please enter both task description")
