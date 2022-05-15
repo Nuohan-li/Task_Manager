@@ -39,7 +39,7 @@ function getData(){
                 deleteButton.addEventListener('click', (event) => {
                     event.preventDefault()
                     let id = []
-                    // getting the index from the html
+                    // getting the index from the html; index here will be used to match the index of the id in db below
                     let index = deleteButton.parentNode.children[0].textContent
                     console.log(index)
                     document.getElementsByClassName('task1')[0].textContent = index
